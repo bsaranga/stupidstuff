@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <style>
+      #app {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .hint {
+        font-size: x-small;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Charithra Pyramid Generator v1</h1>
+    <label for="emoji">
+      <p>
+        Emoji <span class="hint">(In Windows hit Ctrl+. to select emoji)</span>
+      </p>
+      <input id="emoji" value="😉" type="text" />
+    </label>
+
+    <label for="emoji">
+      <p>Height</p>
+      <input id="height" value="5" type="number" />
+    </label>
+
+    <div id="app"></div>
+
+    <button id="clip">Copy To Clipboard</button>
+    <script>
+      const appDiv = document.getElementById('app');
+      const emo = document.getElementById('emoji');
+      const height = document.getElementById('height');
+      const clip = document.getElementById('clip');
+
+      function pyramid(emoji, maxHeight) {
+        let tArr = [];
+        for (let i = 1; i <= maxHeight; i++) {
+          let buff = [];
+          let k = i;
+          while (k > 0) {
+            buff.push(emoji);
+            k--;
+          }
+          tArr.push(buff);
+        }
+
+        let out = tArr.concat(tArr.slice(null, tArr.length - 1).reverse());
+        return out;
+      }
+
+      function exec() {
+        let str = ``;
+
+        pyramid(emo.value, height.value).forEach((i) => {
+          str += i.map((e) => `${e}`).join('') + '\n';
+        });
+
+        appDiv.innerText = str;
+      }
+
+      function copyToClipFn() {
+        let copyText = appDiv.innerText;
+        navigator.clipboard.writeText(copyText);
+      }
+
+      exec();
+
+      emo.addEventListener('change', () => exec());
+      height.addEventListener('change', () => exec());
+      clip.addEventListener('click', () => copyToClipFn());
+    </script>
+  </body>
+</html>
